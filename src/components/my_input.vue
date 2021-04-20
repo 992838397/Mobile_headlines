@@ -42,7 +42,8 @@ export default {
       let value = e.target.value;
       if (this.rules) {
         if (!this.rules.test(value)) {
-          console.log(this.msg);
+          // console.log(this.msg);
+          this.$toast.fail(this.msg);
         }
       }
     },

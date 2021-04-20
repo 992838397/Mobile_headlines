@@ -30,6 +30,7 @@
 <script>
 import my_buttom from "@/components/my_buttom.vue";
 import my_input from "@/components/my_input.vue";
+import { userLogin } from "@/apis/user.js";
 export default {
   data() {
     return {
@@ -45,8 +46,26 @@ export default {
   },
   methods: {
     login(e) {
-      console.log(this.user.username);
-      console.log(this.user.password);
+      // 验证一下密码是否符合,要不然随便输入一次,就发送一次请求,浪费资源
+      if (
+        /^1\d{10}$/.test(this.user.username) &&
+        /^.{3,12}$/.test(this.user.password)
+      ) {
+        userLogin(this.user)
+          .then((res) => {
+            if (res.data.message == "登录成功") {
+              this.$toast.success("登录成功");
+              console.log(res.data);
+            } else {
+              this.$toast.fail("登录失败");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        this.$toast.fail("用户名或密码错误");
+      }
     },
   },
 };
