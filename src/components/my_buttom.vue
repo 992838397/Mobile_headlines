@@ -6,6 +6,7 @@
       danger: type == 'danger',
       orange: type == 'orange',
     }"
+    @click="login"
   >
     <slot></slot>
   </div>
@@ -16,6 +17,12 @@ export default {
   props: {
     type: {
       type: String,
+    },
+  },
+  methods: {
+    //
+    login(e) {
+      this.$emit("click", e);
     },
   },
 };
