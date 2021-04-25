@@ -40,6 +40,13 @@ const router = new VueRouter({
             path: '/index',
             // 异步加载
             component: () => import('@/views/index.vue')
+        },
+        {
+            name: "postDetail",
+            path: '/postDetail/:id',
+            // 异步加载
+            component: () => import('@/views/post/postDetail.vue')
+
         }
     ]
 })

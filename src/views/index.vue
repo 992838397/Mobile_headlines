@@ -14,11 +14,22 @@
     </div>
     <van-tabs v-model="active">
       <van-tab :title="cate.name" v-for="cate in cateList" :key="cate.id">
-        <my_post
-          v-for="item in cate.postList"
-          :key="item.id"
-          :post="item"
-        ></my_post>
+        <van-list
+          v-model="cate.loading"
+          :finished="cate.finished"
+          finished-text="没有更多了"
+          @load="onLoad"
+          :immediate-check="false"
+          :offset="5"
+        >
+          <van-pull-refresh v-model="cate.isLoading" @refresh="onRefresh">
+            <my_post
+              v-for="item in cate.postList"
+              :key="item.id"
+              :post="item"
+            ></my_post>
+          </van-pull-refresh>
+        </van-list>
       </van-tab>
     </van-tabs>
   </div>
@@ -37,7 +48,6 @@ export default {
       // 当前被选中的active
       active: localStorage.getItem("my_token") ? 1 : 0,
       cateList: {}, //这是栏目列表数据
-      //   newsCatelist: {}, //新闻列表数据
     };
   },
   async mounted() {
@@ -54,28 +64,56 @@ export default {
         pageIndex: 1,
         // 当前栏目每页显示的数量
         pageSize: 6,
+        loading: false, //当前组件的上拉加载的状态
+        finished: false, //当前组件的数据是否全部加载完毕的标记
+        isLoading: false, //这个控制下拉刷新
       };
     });
+    // 页面一开始就调用一次
     console.log(this.cateList);
     this.geteditList();
-
-    // 页面一开始就调用一次
   },
   methods: {
+    // 封装请求新闻文章数据
     async geteditList() {
       // 可以通过数组下标索引值拿到ID
       let id = this.cateList[this.active].id;
-      let res = await getNewslist({
+      let current = await getNewslist({
         category: id,
         pageIndex: this.cateList[this.active].pageIndex,
         pageSize: this.cateList[this.active].pageSize,
       });
-      this.cateList[this.active].postList = res.data.data;
-      console.log(this.cateList[this.active].postList);
+      current = current.data.data;
+      this.cateList[this.active].postList.push(...current);
+
+      // 本次请求完成之后,将loading重置为false,方便下一次加载
+      this.cateList[this.active].loading = false;
+      // 本次下拉刷新完成,将isloading重置为false,方便下一次加载
+      this.cateList[this.active].isLoading = false;
+
+      //判断数据是否全部加载完成 如果返回的数据小于五条,说明已经没有数据了,把finished设置true
+      if (current.length < this.cateList[this.active].pageSize) {
+        this.cateList[this.active].finished = true;
+      }
     },
-    // getactive() {
-    //   this.geteditList();
-    // },
+    // 处理上拉加载
+    onLoad() {
+      this.cateList[this.active].pageIndex++;
+      this.geteditList();
+      // this.loading = false;
+      // this.finished = true;
+    },
+    // 这是处理下拉刷新   (也就是刷新最新的数据,原来的数据要删除,然后重新获取新的数据)
+    onRefresh() {
+      // 页码回到第一页
+      this.cateList[this.active].pageIndex = 1;
+      // 清空数据,
+      this.cateList[this.active].postList.length = 0;
+      //将之前可能重置为true的finished状态重置为false
+      this.cateList[this.active].finished = false;
+      // 重新调用数据
+      this.geteditList();
+    },
   },
   watch: {
     active() {
