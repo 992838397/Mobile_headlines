@@ -5,12 +5,19 @@ import App from './App.vue'
 import '@/styles/reset.less'
 
 
-import { toast } from 'vant';
-Vue.use(toast);
+import { toast, Icon, Uploader, Dialog, Field, ActionSheet, Tab, Tabs } from 'vant';
+Vue.use(toast)
+  .use(Icon)
+  .use(Uploader)
+  .use(Dialog)
+  .use(Field)
+  .use(ActionSheet)
+  .use(Tab)
+  .use(Tabs)
 
 // 引入路由
 // import router from '@/router/index.js'
-import router from '@/router/index'
+import router from '@/router/index.js'
 
 Vue.config.productionTip = false
 

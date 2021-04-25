@@ -39,6 +39,7 @@ export default {
   color: #fff;
   font-weight: bold;
   font-size: 20px;
+  margin: 0 auto;
 }
 .primary {
   border: 1px solid rgb(67, 145, 4);

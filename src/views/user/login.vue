@@ -5,14 +5,14 @@
       <div class="logo"><span class="iconfont iconnew"></span></div>
       <div class="inputs">
         <my_input
-          v-model="user.username"
+          v-model.trim="user.username"
           placeholder="请输入手机号"
           :rules="/^1\d{10}$|^1\d{4}$/"
           msg="请输入11位手机号码"
         ></my_input>
 
         <my_input
-          v-model="user.password"
+          v-model.trim="user.password"
           placeholder="请输入密码"
           :rules="/^.{3,12}$/"
           msg="请输入3-12位密码"
@@ -35,8 +35,8 @@ export default {
   data() {
     return {
       user: {
-        username: "",
-        password: "",
+        username: "13035808046",
+        password: "116616",
       },
     };
   },
@@ -55,7 +55,12 @@ export default {
           .then((res) => {
             if (res.data.message == "登录成功") {
               this.$toast.success("登录成功");
-              console.log(res.data);
+              // 保存token值,后期验证使用
+              localStorage.setItem("my_token", res.data.data.token);
+              // 跳转到个人中心
+              this.$router.push({
+                path: `/persondal/${res.data.data.user.id}`,
+              });
             } else {
               this.$toast.fail("登录失败");
             }
