@@ -17,7 +17,15 @@ axios.interceptors.request.use(function (config) {
 // 添加响应拦截器
 axios.interceptors.response.use(function (response) {
     if (response.data.message == '用户信息验证失败!' || response.data.message == '用户信息验证失败') {
-        window.location.href = '#/login'
+        // 页面跳转回当前点击页面
+
+
+        console.log("当前路径", location.href);
+        // 响应拦截,拦截下来,等到登录页面的时候调用,然后判断是否登录到个人中心还是跳转前的页面
+        window.location.href = '#/login?=redirect_url' + window.location.href
+
+
+
     }
     // 对响应数据做点什么
     return response;

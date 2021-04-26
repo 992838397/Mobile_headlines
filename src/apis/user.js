@@ -47,3 +47,17 @@ export const upfollowUser = id => {
         url: `/user_unfollow/${id}`
     })
 }
+
+// 收藏列表
+export const getUserStars = () => {
+    return axios({
+        url: '/user_star'
+    })
+}
+
+// 我的关注列表
+export const getUserfollow = () => {
+    return axios({
+        url: '/user_follows'
+    })
+}

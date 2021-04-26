@@ -8,11 +8,11 @@
         <van-icon name="search" />
         <span>搜索商品</span>
       </div>
-      <div class="user" @click="$router.push({ path: `/personal/${id}` })">
+      <div class="user" @click="localPre">
         <van-icon name="manager-o" />
       </div>
     </div>
-    <van-tabs v-model="active">
+    <van-tabs v-model="active" @change="getacvite">
       <van-tab :title="cate.name" v-for="cate in cateList" :key="cate.id">
         <van-list
           v-model="cate.loading"
@@ -74,6 +74,21 @@ export default {
     this.geteditList();
   },
   methods: {
+    // 点击图标跳转主页或者登入页面
+    localPre() {
+      // 没id?
+      let id = localStorage.getItem("my_id");
+      if (id) {
+        this.$router.push({ path: `/persondal/${id}` });
+      } else {
+        this.$router.push({ name: "login" });
+      }
+    },
+
+    getacvite(name, active) {
+      console.log(name);
+    },
+
     // 封装请求新闻文章数据
     async geteditList() {
       // 可以通过数组下标索引值拿到ID

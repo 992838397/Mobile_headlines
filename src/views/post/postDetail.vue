@@ -3,7 +3,10 @@
     <div class="header">
       <div class="left">
         <van-icon name="arrow-left back" @click="$router.back()" />
-        <span class="iconfont iconnew new"></span>
+        <span
+          class="iconfont iconnew new"
+          @click="$router.push({ name: 'index' })"
+        ></span>
       </div>
       <span @click="followUserByid" :class="{ active: post.has_follow }">{{
         post.has_follow ? "已关注" : "关注"
@@ -42,12 +45,16 @@
       </div>
       <div class="more">更多跟帖</div>
     </div>
+
+    <!-- 底部 -->
+    <my_commentFooter :post="post"></my_commentFooter>
   </div>
 </template>
 
 <script>
 import { getArticlelist, getGood } from "@/apis/post.js";
 import { followUser, upfollowUser } from "@/apis/user.js";
+import my_commentFooter from "@/components/my_commentFooter";
 export default {
   data() {
     return {
@@ -55,6 +62,9 @@ export default {
         user: {},
       },
     };
+  },
+  components: {
+    my_commentFooter,
   },
   methods: {
     async followUserByid() {
@@ -83,6 +93,7 @@ export default {
     let res = await getArticlelist(id);
     this.post = res.data.data;
     console.log(res);
+    console.log("这是post", this.post);
   },
 };
 </script>

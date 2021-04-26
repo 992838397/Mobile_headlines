@@ -55,12 +55,25 @@ export default {
           .then((res) => {
             if (res.data.message == "登录成功") {
               this.$toast.success("登录成功");
+              console.log(res);
               // 保存token值,后期验证使用
               localStorage.setItem("my_token", res.data.data.token);
-              // 跳转到个人中心
-              this.$router.push({
-                path: `/persondal/${res.data.data.user.id}`,
-              });
+              localStorage.setItem("my_id", res.data.data.user.id);
+              console.log("这是login", location.href);
+              //这里的localtion.href是被响应拦截器添加了路径的,需要通过字符截取拿到后面,进行跳转
+              // 拦截器拦截下来,这里调用查看,如果有值,说明是从关注或者收藏页面跳转的,如果没有说明要跳转到个人中心页
+              let redirect = location.href.split("=")[1];
+              // 如果是从关注或收藏页面跳转到登录页面的,就会有这个值,如果不是,就不会有这个值
+              // 如果有这个值,就跳转回当前的值得页面,没有值得话就跳转到个人中心页面
+              if (redirect) {
+                location.href = redirect;
+                console.log(111111);
+              } else {
+                // 跳转到个人中心
+                this.$router.push({
+                  path: `/persondal/${res.data.data.user.id}`,
+                });
+              }
             } else {
               this.$toast.fail("登录失败");
             }

@@ -23,3 +23,11 @@ export const getGood = (id) => {
         url: '/post_like/' + id
     })
 }
+
+// 点击收藏文章
+export const starThisAriticle = (id) => {
+    return axios({
+        url: '/post_star/' + id
+
+    })
+}

@@ -46,7 +46,19 @@ const router = new VueRouter({
             path: '/postDetail/:id',
             // 异步加载
             component: () => import('@/views/post/postDetail.vue')
-
+        },
+        {
+            name: "myfollow",
+            path: '/myfollow/:id',
+            // 异步加载
+            component: () => import('@/views/user/myfollow.vue')
+        }
+        ,
+        {
+            name: "mystar",
+            path: '/mystar/:id',
+            // 异步加载
+            component: () => import('@/views/user/mystar.vue')
         }
     ]
 })

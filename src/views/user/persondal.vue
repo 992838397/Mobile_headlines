@@ -21,9 +21,19 @@
     </router-link>
 
     <!-- 调用封装好的 -->
-    <my_celi title="我的关注" msg="关注的用户"> </my_celi>
+    <my_celi
+      title="我的关注"
+      msg="关注的用户"
+      @click.native="$router.push({ path: `/myfollow/${id}` })"
+    >
+    </my_celi>
     <my_celi title="我的跟帖" msg="跟帖/回复"> </my_celi>
-    <my_celi title="我的收藏" msg="文章/视频"> </my_celi>
+    <my_celi
+      title="我的收藏"
+      msg="文章/视频"
+      @click.native="$router.push({ path: `/mystar/${id}` })"
+    >
+    </my_celi>
     <my_celi title="设置"> </my_celi>
 
     <my_buttom type="danger" style="margin-top: 20px">退出</my_buttom>
